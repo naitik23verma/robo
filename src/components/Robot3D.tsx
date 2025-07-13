@@ -66,7 +66,7 @@ function RobotModel({ mouse, onRobotClick }: { mouse: { x: number; y: number }; 
   useEffect(() => {
     if (gltf && gltf.scene) {
       gltf.scene.traverse((child) => {
-        if (child.isMesh) {
+        if (child instanceof THREE.Mesh) {
           const name = child.name.toLowerCase();
           // Set eyes to cyan/blue
           if (name.includes('eye')) {
