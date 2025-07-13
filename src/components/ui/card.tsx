@@ -2,7 +2,13 @@ import React from "react";
 
 import { cn } from "@/lib/utils";
 
-export function GradientBorderCard({ children, className = "", borderClass = "", ...props }) {
+interface GradientBorderCardProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+  className?: string;
+  borderClass?: string;
+}
+
+export function GradientBorderCard({ children, className = "", borderClass = "", ...props }: GradientBorderCardProps) {
   return (
     <div className={`relative rounded-2xl p-[2px] bg-gradient-to-r from-red-400 via-yellow-400 to-orange-400 ${borderClass}`}>
       <div className={`rounded-2xl bg-background/80 backdrop-blur-lg ${className}`} {...props}>
