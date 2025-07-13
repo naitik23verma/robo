@@ -1,6 +1,16 @@
-import * as React from "react";
+import React from "react";
 
 import { cn } from "@/lib/utils";
+
+export function GradientBorderCard({ children, className = "", borderClass = "", ...props }) {
+  return (
+    <div className={`relative rounded-2xl p-[2px] bg-gradient-to-r from-red-400 via-yellow-400 to-green-400 ${borderClass}`}>
+      <div className={`rounded-2xl bg-background/80 backdrop-blur-lg ${className}`} {...props}>
+        {children}
+      </div>
+    </div>
+  );
+}
 
 const Card = React.forwardRef<
   HTMLDivElement,
@@ -9,7 +19,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
+      "rounded-lg border bg-card text-card-foreground shadow-sm animated-gradient-border",
       className,
     )}
     {...props}
