@@ -7,7 +7,7 @@ import * as THREE from "three";
 
 function RobotModel({ mouse, onRobotClick }: { mouse: { x: number; y: number }; onRobotClick: () => void }) {
   const gltf = useGLTF('/models/robot_head.glb');
-  const logoTexture = useTexture('/robotics_logo.jpeg');
+  const logoTexture = useTexture('/robotics_logo.png');
   const head = useRef<THREE.Group>(null);
   const headPivot = useRef<THREE.Group>(null);
   const body = useRef<THREE.Group>(null);
@@ -253,7 +253,7 @@ export default function Robot3D() {
             <div className="text-center space-y-4">
               <div className="w-32 h-32 mx-auto bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center">
                 <img 
-                  src="/robotics_logo.jpeg" 
+                  src="/robotics_logo.png" 
                   alt="Robotics Logo" 
                   className="w-24 h-24 object-contain rounded-lg"
                 />

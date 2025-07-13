@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 export function GradientBorderCard({ children, className = "", borderClass = "", ...props }) {
   return (
-    <div className={`relative rounded-2xl p-[2px] bg-gradient-to-r from-red-400 via-yellow-400 to-green-400 ${borderClass}`}>
+    <div className={`relative rounded-2xl p-[2px] bg-gradient-to-r from-red-400 via-yellow-400 to-orange-400 ${borderClass}`}>
       <div className={`rounded-2xl bg-background/80 backdrop-blur-lg ${className}`} {...props}>
         {children}
       </div>

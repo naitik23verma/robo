@@ -37,6 +37,8 @@ import {
   Rocket,
   Code,
   Brain,
+  Menu,
+  X,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
@@ -47,12 +49,13 @@ const Robot3D = dynamic(() => import("@/components/Robot3D"), {
   ssr: false,
   loading: () => <div className="w-full h-full bg-gradient-to-br from-muted/50 to-muted/30 rounded-2xl flex items-center justify-center"><div className="text-muted-foreground">Loading 3D Model...</div></div>
 });
-import AnimatedCarousel from "@/components/AnimatedCarousel";
+import CircularGallery from "@/components/CircularGallery";
 import AnimatedCounter from "@/components/AnimatedCounter";
 
 export default function Home() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [currentSponsor, setCurrentSponsor] = useState(0);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   // Gallery images data
   const galleryImages = [
@@ -256,71 +259,117 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <nav className="sticky top-0 z-50 w-full glass border-b border-border/40">
-        <div className="container flex h-20 items-center justify-between">
-          <motion.div 
-            className="flex items-center space-x-4"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="flex items-center space-x-3">
-              <div className="h-12 w-12 rounded-xl bg-gradient-erc flex items-center justify-center shadow-lg hover-glow">
-                <Cpu className="h-7 w-7 text-white" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold font-orbitron bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  Robotics Club
-                </span>
-                <span className="text-xs text-muted-foreground font-montserrat">
-                  MANIT Bhopal
-                </span>
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div 
-            className="hidden md:flex items-center space-x-8"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            {[
-              { href: "#gallery", label: "Gallery" },
-              { href: "#events", label: "Events" },
-              { href: "#projects", label: "Projects" },
-              { href: "#about", label: "About" },
-              { href: "#contact", label: "Contact" },
-            ].map((link, index) => (
-              <motion.a
-                key={link.href}
-                href={link.href}
-                className="text-muted-foreground hover:text-primary transition-all duration-300 font-montserrat font-medium hover:scale-105"
-                whileHover={{ y: -2 }}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-              >
-                {link.label}
-              </motion.a>
-            ))}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-            >
-              <Button className="bg-gradient-erc hover:shadow-lg hover:scale-105 transition-all duration-300 font-montserrat font-semibold">
-                <Rocket className="mr-2 h-4 w-4" />
-                Join Club
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </motion.div>
-          </motion.div>
+      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 w-[95vw] max-w-7xl z-50 bg-background/80 backdrop-blur-xl rounded-full px-6 py-2 flex items-center justify-between shadow-lg border border-border/40">
+        <div className="flex items-center space-x-3">
+          <img
+            src="/robotics_logo.png"
+            alt="Robotics Club Logo"
+            className="h-12 w-12 rounded-xl object-cover shadow-lg hover-glow"
+          />
+          <div className="flex flex-col">
+            <span className="text-xl font-bold font-orbitron bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Robotics Club
+            </span>
+            <span className="text-xs text-muted-foreground font-montserrat">
+              MANIT Bhopal
+            </span>
+          </div>
         </div>
+        {/* Desktop Links */}
+        <div className="hidden md:flex items-center space-x-8">
+          {[
+            { href: "#gallery", label: "Gallery" },
+            { href: "#events", label: "Events" },
+            { href: "#projects", label: "Projects" },
+            { href: "#about", label: "About" },
+            { href: "#contact", label: "Contact" },
+          ].map((link, index) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-muted-foreground hover:text-primary transition-all duration-300 font-montserrat font-medium hover:scale-105 px-2 py-1 rounded-full"
+            >
+              {link.label}
+            </a>
+          ))}
+          <Button className="bg-gradient-erc hover:shadow-lg hover:scale-105 transition-all duration-300 font-montserrat font-semibold ml-4 rounded-full px-5 py-2">
+            <Rocket className="mr-2 h-4 w-4" />
+            Join Club
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+        {/* Mobile Hamburger */}
+        <button
+          className="md:hidden p-2 rounded-full bg-gradient-erc text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-primary"
+          onClick={() => setMobileNavOpen((v) => !v)}
+          aria-label="Toggle navigation"
+        >
+          {mobileNavOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
       </nav>
+      {/* Mobile Dropdown */}
+      {mobileNavOpen && (
+        <div className="fixed top-[calc(3.5rem+1.5rem)] left-1/2 transform -translate-x-1/2 w-[95vw] max-w-7xl z-40 bg-background/95 backdrop-blur-xl rounded-3xl shadow-lg border border-border/40 flex flex-col items-center py-6 space-y-4 md:hidden">
+          {[
+            { href: "#gallery", label: "Gallery" },
+            { href: "#events", label: "Events" },
+            { href: "#projects", label: "Projects" },
+            { href: "#about", label: "About" },
+            { href: "#contact", label: "Contact" },
+          ].map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="text-muted-foreground hover:text-primary transition-all duration-300 font-montserrat font-medium text-lg px-4 py-2 rounded-full"
+              onClick={() => setMobileNavOpen(false)}
+            >
+              {link.label}
+            </a>
+          ))}
+          <Button className="w-full bg-gradient-erc hover:shadow-lg hover:scale-105 transition-all duration-300 font-montserrat font-semibold rounded-full px-5 py-3 text-lg">
+            <Rocket className="mr-2 h-5 w-5" />
+            Join Club
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
+        </div>
+      )}
 
       {/* Hero Section */}
       <section className="relative py-32 lg:py-40 overflow-hidden">
+        {/* Social Media Icons - right side */}
+        <motion.div
+          className="hidden lg:flex flex-col items-center space-y-6 absolute top-1/2 right-8 transform -translate-y-1/2 z-30"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: { staggerChildren: 0.15 }
+            }
+          }}
+        >
+          {[
+            { icon: Facebook, href: "#" },
+            { icon: Twitter, href: "#" },
+            { icon: Instagram, href: "#" },
+            { icon: Linkedin, href: "#" },
+            { icon: Youtube, href: "#" },
+          ].map((social, i) => (
+            <motion.a
+              key={i}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-primary transition-colors bg-background/80 rounded-full p-3 shadow-lg"
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
+              whileHover={{ scale: 1.2, y: -2 }}
+            >
+              <social.icon className="h-6 w-6" />
+            </motion.a>
+          ))}
+        </motion.div>
         {/* Background gradient */}
         <div className="absolute inset-0 bg-gradient-dark"></div>
         
@@ -426,76 +475,42 @@ export default function Home() {
       </section>
 
       {/* Auto-Sliding Gallery Highlights */}
-      <section id="gallery" className="py-24 relative">
+      <section id="gallery" className="py-4 relative overflow-hidden">
         <div className="container">
           <motion.div 
-            className="mb-16 text-center"
+            className="mb-20 text-center"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl sm:text-5xl font-bold font-orbitron mb-6">
+            <h2 className="text-4xl sm:text-5xl font-bold font-orbitron mb-8">
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 Gallery Highlights
               </span>
             </h2>
-            <p className="text-xl text-muted-foreground font-montserrat max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground font-montserrat max-w-3xl mx-auto mb-0">
               Capturing moments of innovation, collaboration, and achievement
             </p>
           </motion.div>
 
-          {/* Main Animated Carousel */}
+          {/* Main Circular Gallery */}
           <motion.div 
-            className="mb-12"
+            className="mb-0"
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <AnimatedCarousel
+            <CircularGallery
               items={galleryImages.map(img => ({
-                id: img.id,
-                src: img.src,
-                alt: img.alt,
-                title: img.title,
-                description: "Innovation in action"
+                image: img.src,
+                text: img.title
               }))}
-              autoPlayInterval={4000}
-              className="h-96 md:h-[500px]"
+              height={300}
+              imageWidth={400}
+              scrollSpeed={1.2}
             />
-          </motion.div>
-
-          {/* Thumbnail Grid */}
-          <motion.div 
-            className="grid grid-cols-2 md:grid-cols-4 gap-6"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-          >
-            {galleryImages.slice(0, 4).map((image, index) => (
-              <motion.div
-                key={image.id}
-                whileHover={{ y: -10, scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-              >
-                <Card className="overflow-hidden hover-lift cursor-pointer glass">
-                  <div className="aspect-video">
-                    <img
-                      src={image.src}
-                      alt={image.alt}
-                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
-                    />
-                  </div>
-                  <CardContent className="p-4">
-                    <h3 className="font-semibold font-orbitron text-sm">
-                      {image.title}
-                    </h3>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
           </motion.div>
         </div>
       </section>
@@ -1191,9 +1206,11 @@ export default function Home() {
               viewport={{ once: true }}
             >
               <div className="flex items-center space-x-3">
-                <div className="h-12 w-12 rounded-xl bg-gradient-erc flex items-center justify-center shadow-lg">
-                  <Cpu className="h-7 w-7 text-white" />
-                </div>
+                <img
+                  src="/robotics_logo.png"
+                  alt="Robotics Club Logo"
+                  className="h-12 w-12 rounded-xl object-cover shadow-lg"
+                />
                 <div className="flex flex-col">
                   <span className="text-xl font-bold font-orbitron bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                     Robotics Club
